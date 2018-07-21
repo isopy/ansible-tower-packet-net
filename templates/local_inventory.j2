@@ -1,0 +1,9 @@
+[tower]
+{% for host in groups['tower'] %}
+{{ host }}  ansible_host={{ hostvars[host]['ip_address']}}
+{% endfor %}
+
+[database]
+{% for host in groups['database'] %}
+{{ host }}  ansible_host={{ hostvars[host]['ip_address']}}
+{% endfor %}

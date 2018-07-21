@@ -1,0 +1,30 @@
+[tower]
+{% for host in groups['tower'] %}
+{{ host }}  ansible_host={{ hostvars[host]['ip_address']}}
+{% endfor %}
+
+[database]
+{% for host in groups['database'] %}
+{{ host }}  ansible_host={{ hostvars[host]['ip_address']}}
+{% endfor %}
+
+[all:vars]
+ansible_user=root
+
+admin_password='password'
+
+pg_host='{{ hostvars[groups['database'][0]]['ip_address'] }}'
+pg_port='5432'
+
+pg_database='tower'
+pg_username='tower'
+pg_password='password'
+
+rabbitmq_port=5672
+rabbitmq_vhost=tower
+rabbitmq_username=tower
+rabbitmq_password=tower
+rabbitmq_cookie=rabbitmqcookie
+
+# Needs to be true for fqdns and ip addresses
+rabbitmq_use_long_name=true

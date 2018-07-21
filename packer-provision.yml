@@ -1,0 +1,173 @@
+- hosts: all
+  remote_user: root
+  gather_facts: false
+  become: false
+
+  vars:
+    api_token: your_api_key # vault
+    project_name: tower_lab #playbook var
+    operating_system: centos_7 #defaults
+
+  tasks:
+    - block:
+      - name: get project id
+        uri:
+          url: https://api.packet.net/projects
+          method: GET
+          headers:
+            accept: "application/json; version=1"
+            content-type: "application/json"
+            x-auth-token: "{{ api_token }}"
+        register: project_info
+        run_once: true
+
+      - set_fact:
+          project_id: "{{ (project_info.json.projects | selectattr('name','equalto', project_name) | first).id }}"
+        run_once: true
+
+      - name: Get info about provisioned devices
+        uri:
+          url: "https://api.packet.net/projects/{{ project_id }}/devices"
+          method: GET
+          headers:
+            accept: "application/json; version=1"
+            content-type: "application/json"
+            x-auth-token: "{{ api_token }}"
+        register: device_info
+
+      - name: if any instances exist from our inventory, set a fact
+        set_fact:
+          instance_exists: true
+        when: (device_info.json.devices | selectattr('hostname','equalto', inventory_hostname) | first).hostname
+        ignore_errors: true
+        register: instance_exists_status
+
+      - name: if all instances don't exist, set this fact
+        set_fact:
+          instance_exists: false
+        when: instance_exists_status.failed
+        register: instance_exists_status
+
+      - debug:
+          var: instance_exists
+
+      - name: provision my instances
+        uri:
+          url: "https://api.packet.net/projects/{{ project_id }}/devices"
+          method: POST
+          headers:
+            accept: "application/json; version=1"
+            content-type: "application/json"
+            x-auth-token: "{{ api_token }}"
+          body: "{{ lookup('template','provision_body_json.j2') }}"
+          timeout: 120
+          body_format: json
+          status_code: 201
+        register: provision_info
+        when: not instance_exists
+
+      - name: wait until instances are in the 'active' status
+        uri:
+          url: "https://api.packet.net/projects/{{ project_id }}/devices"
+          method: GET
+          headers:
+            accept: "application/json; version=1"
+            content-type: "application/json"
+            x-auth-token: "{{ api_token }}"
+        register: device_info
+        until: (device_info.json.devices | selectattr('hostname','equalto', inventory_hostname) | first).state == 'active'
+        retries: 60
+        delay: 10
+        tags:
+          - get_info
+          - install_tower
+
+      - set_fact:
+          ip_address: "{{ (device_info.json.devices | selectattr('hostname','equalto', inventory_hostname) | first).ip_addresses[0].address }}"
+        tags: get_info,install_tower
+
+      - debug:
+          var: ip_address
+        tags: get_info
+
+      - name: generate ssh key pair
+        user:
+          name: "{{ ansible_user }}"
+          generate_ssh_key: yes
+          ssh_key_file: /tmp/.ssh/id_rsa
+        run_once: true
+        tags: genkey
+
+      - name: update local inventory
+        template:
+          src: local_inventory.j2
+          dest: inventory
+        run_once: true
+        tags: install_tower
+
+      - meta: refresh_inventory
+      delegate_to: localhost
+      connection: local
+
+    - name: copy private and public key files to instances
+      copy:
+        src: /tmp/.ssh
+        dest: /root/
+        mode: 0400
+
+    - name: update authorized keys
+      authorized_key:
+        user: root
+        state: present
+        key: "{{ lookup('file', '/tmp/.ssh/id_rsa.pub') }}"
+
+- hosts: all
+  remote_user: root
+  gather_facts: false
+  become: false
+  vars:
+    tmp_dir: /tmp/tower_install
+    tower_version: 3.2.5
+    tower_install_dir: "{{ tmp_dir }}/ansible-tower-setup-{{ tower_version }}"
+
+  tasks:
+    - block:
+      - name: make temp dir where installer will run from
+        file:
+          path: "{{ tmp_dir }}"
+          state: directory
+        tags: install_tower
+
+      - name: download installer
+        get_url:
+          url: "https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-{{ tower_version }}.tar.gz"
+          dest: "{{ tmp_dir }}"
+        register: tar_download_info
+        tags: install_tower
+
+      - name: unarchive installer
+        unarchive:
+          src: "{{ tar_download_info.dest }}"
+          dest: "{{ tmp_dir }}"
+        register: unarchive_info
+        tags: install_tower
+
+      - name: create inventory in {{ tower_install_dir }}
+        template:
+          src: install_inventory.j2
+          dest: "{{ tower_install_dir }}/inventory"
+        tags: install_tower
+
+      - name: run the tower installer
+        shell: "ANSIBLE_HOST_KEY_CHECKING=False ./setup.sh"
+        args:
+          chdir: "{{ tower_install_dir }}"
+        tags: install_tower
+
+      - name: tower url
+        debug:
+          msg: "You should be able to access Tower at https://{{ hostvars[groups['tower'][0]]['ip_address'] }}"
+        tags: install_tower
+      run_once: true
+      delegate_to: localhost
+      connection: local

@@ -1,0 +1,7 @@
+[tower]
+tower1.example.com  ansible_host=147.75.95.67
+tower2.example.com  ansible_host=147.75.95.89
+tower3.example.com  ansible_host=147.75.95.97
+
+[database]
+postgres1.example.com  ansible_host=147.75.95.69
