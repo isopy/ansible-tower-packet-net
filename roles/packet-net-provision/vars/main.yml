@@ -1,0 +1,3 @@
+---
+# vars file for packet-net-provision
+api_token: "{{ vaulted_api_token }}"

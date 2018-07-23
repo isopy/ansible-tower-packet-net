@@ -1,0 +1,37 @@
+---
+# tasks file for tower-install
+- block:
+  - name: make temp dir where installer will run from
+    file:
+      path: "{{ tmp_dir }}"
+      state: directory
+
+  - name: download installer
+    get_url:
+      url: "https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-{{ tower_version }}.tar.gz"
+      dest: "{{ tmp_dir }}"
+    register: tar_download_info
+
+  - name: unarchive installer
+    unarchive:
+      src: "{{ tar_download_info.dest }}"
+      dest: "{{ tmp_dir }}"
+
+  - name: create inventory in {{ tower_install_dir }}
+    template:
+      src: install_inventory.j2
+      dest: "{{ tower_install_dir }}/inventory"
+
+  - name: run the tower installer
+    shell: "ANSIBLE_HOST_KEY_CHECKING=False ./setup.sh"
+    args:
+      chdir: "{{ tower_install_dir }}"
+
+  - name: tower url
+    debug:
+      msg: "You should be able to access Tower at https://{{ hostvars[groups['tower'][0]]['ip_address'] }}"
+
+  run_once: true
+  tags: install_tower
+  delegate_to: localhost
+  connection: local

@@ -1,0 +1,16 @@
+- hosts: all
+  remote_user: root
+  gather_facts: false
+  become: false
+  vars:
+     instance_state: present
+
+  tasks:
+    - name: include the packet-net-provision role
+      include_role:
+        name: packet-net-provision
+
+    - name: include the tower-install role
+      include_role:
+        name: tower-install
+      when: instance_state == 'present'

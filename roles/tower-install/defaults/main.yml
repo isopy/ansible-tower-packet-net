@@ -1,0 +1,5 @@
+---
+# defaults file for tower-install
+tmp_dir: /tmp/tower_install
+tower_version: 3.2.5
+tower_install_dir: "{{ tmp_dir }}/ansible-tower-setup-{{ tower_version }}"
