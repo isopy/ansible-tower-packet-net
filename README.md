@@ -40,7 +40,7 @@ vaulted_api_token: <your_api_key>
 #### Vault your api key
 ```ansible-vault encrypt roles/packet-net-provision/vars/vault.yml```
 
-#### Update roles/packet-net-provsion/defaults/main.yml with your project name
+#### Update roles/packet-net-provision/defaults/main.yml with your project name
 ```
 ---
 # roles/packet-net-provsion/defaults/main.yml
