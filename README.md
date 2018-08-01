@@ -5,7 +5,7 @@ The `tower-packet-lab.yml` playbook will:
 - Provision an Ansible Tower cluster on https://packet.net/ which consists of:
 	 - 3 Tower instances
 	 - 1 Postgres instance
- - Install the latest version of Ansible Tower
+ - Install the version of Ansible Tower specified by the `tower_version` variable
 
 ## Packet.net setup
   Visit https://packet.net/:
