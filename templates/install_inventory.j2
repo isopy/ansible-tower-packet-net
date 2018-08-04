@@ -3,6 +3,25 @@
 {{ host }}  ansible_host={{ hostvars[host]['ip_address']}}
 {% endfor %}
 
+[instance_group_dev]
+{% for host in groups['instance_group_dev'] %}
+{{ host }}  ansible_host={{ hostvars[host]['ip_address']}}
+{% endfor %}
+
+[instance_group_prod]
+{% for host in groups['instance_group_prod'] %}
+{{ host }}  ansible_host={{ hostvars[host]['ip_address']}}
+{% endfor %}
+
+[isolated_group_uk]
+{% for host in groups['isolated_group_uk'] %}
+{{ host }}  ansible_host={{ hostvars[host]['ip_address']}}
+{% endfor %}
+
+[isolated_group_uk:vars]
+controller=tower
+plan=t1.small.x86
+
 [database]
 {% for host in groups['database'] %}
 {{ host }}  ansible_host={{ hostvars[host]['ip_address']}}
