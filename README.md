@@ -2,10 +2,12 @@
 This project was borne out of a need to quickly spin up Ansible Tower clusters for customer demos or to test the latest Tower version.
 
 The `tower-packet-lab.yml` playbook will:
-- Provision an Ansible Tower cluster on https://packet.net/ which consists of:
-	 - 3 Tower instances
-	 - 1 Postgres instance
- - Install the latest version of Ansible Tower
+- Provision an Ansible Tower cluster on https://packet.net/ :
+  - 3 clustered Tower instances
+    - 2 instance groups
+   - 1 isolated Tower instance
+   - 1 Postgres instance
+ - Install the version of Ansible Tower specified by the `tower_version` variable
 
 ## Packet.net setup
   Visit https://packet.net/:
