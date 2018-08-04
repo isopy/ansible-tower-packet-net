@@ -3,5 +3,19 @@ tower1.example.com
 tower2.example.com
 tower3.example.com
 
+[instance_group_dev]
+tower1.example.com
+
+[instance_group_prod]
+tower2.example.com
+tower3.example.com
+
+[isolated_group_uk]
+remoteuk.example.com
+
+[isolated_group_uk:vars]
+controller=tower
+plan=t1.small.x86
+
 [database]
 postgres1.example.com
