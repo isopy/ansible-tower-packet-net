@@ -32,20 +32,20 @@ command_timeout = 100
 ```
 _*or remove the 'vault_password_file' line if you prefer to supply the password some other way_
 
-#### Update roles/packet-net-provision/vars/vault.yml with your api key
+#### Update roles/packet-provision/vars/vault.yml with your api key
 ```
 ---
-# roles/packet-net-provision/vars/vault.yml
+# roles/packet-provision/vars/vault.yml
 vaulted_api_token: <your_api_key>
 ```
 
 #### Vault your api key
-```ansible-vault encrypt roles/packet-net-provision/vars/vault.yml```
+```ansible-vault encrypt roles/packet-provision/vars/vault.yml```
 
-#### Update roles/packet-net-provision/defaults/main.yml with your project name
+#### Update roles/packet-provision/defaults/main.yml with your project name
 ```
 ---
-# roles/packet-net-provsion/defaults/main.yml
+# roles/packet-provsion/defaults/main.yml
 project_name: <your_project_name>
 ```
 
