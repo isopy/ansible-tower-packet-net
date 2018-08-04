@@ -1,21 +1,20 @@
 [tower]
-tower1.example.com
-tower2.example.com
-tower3.example.com
+tower1.example.com  ansible_host=147.75.72.179
+tower2.example.com  ansible_host=147.75.67.235
+tower3.example.com  ansible_host=147.75.67.37
 
 [instance_group_dev]
-tower1.example.com
+tower1.example.com  ansible_host=147.75.72.179
 
 [instance_group_prod]
-tower2.example.com
-tower3.example.com
+tower2.example.com  ansible_host=147.75.67.235
+tower3.example.com  ansible_host=147.75.67.37
 
 [isolated_group_uk]
-remoteuk.example.com
+remoteuk.example.com  ansible_host=147.75.67.233
 
 [isolated_group_uk:vars]
 controller=tower
-plan=t1.small.x86
 
 [database]
-postgres1.example.com
+postgres1.example.com  ansible_host=147.75.67.39
