@@ -6,7 +6,6 @@
      instance_state: present
 
   tasks:
-    # TODO: block/rescue to clean up instances if this role fails while executing
     - name: include the packet-provision role
       include_role:
         name: packet-provision
