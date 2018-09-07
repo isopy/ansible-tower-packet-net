@@ -4,7 +4,7 @@ This project was borne out of a need to quickly spin up Ansible Tower clusters f
 The `tower-packet-lab.yml` playbook will:
 - Provision an Ansible Tower cluster on https://packet.net/ :
   - 3 clustered Tower instances
-    - 2 instance groups
+   - 2 instance groups
    - 1 isolated Tower instance
    - 1 Postgres instance
  - Install the version of Ansible Tower specified by the `tower_version` variable
@@ -50,11 +50,11 @@ project_name: <your_project_name>
 ```
 
 ## Run it
-#### Provision instances and install Ansible Tower version 3.2.5
+#### Provision instances and install Ansible Tower version 3.2.6
 ```ansible-playbook tower-packet-lab.yml```
 
 
-#### Install a version other than '3.2.5'
+#### Install a version other than '3.2.6'
 ```ansible-playbook tower-packet-lab.yml --extra-vars tower_version='3.2.1'```
 
 #### Remove your instances
