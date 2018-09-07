@@ -7,8 +7,5 @@ ssh_pubkey_label: spacecats_pub_ssh
 wait_timeout: 900
 plan: x1.small.x86
 billing_cycle: hourly
-facility: ewr1 # New Jersey
-    # some local facility alternatives are:
-    # iad1 - Virginia
-    # atl1 - Georgia
-    # sjc1 - California
+facility: ord1 #chicago
+  # other facilities you can provision x1.small.x86 are documented here: https://www.packet.net/bare-metal/servers/x1-small/A
