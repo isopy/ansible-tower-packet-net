@@ -14,3 +14,11 @@
       include_role:
         name: tower-install
       when: instance_state == 'present'
+
+    - name: navigate to tower login via default brower
+      command: open "https://{{ hostvars[groups['tower'][0]]['ip_address'] }}"
+      ignore_errors: true
+      changed_when: false
+      run_once: true
+      delegate_to: localhost
+      when: instance_state == 'present'
