@@ -29,7 +29,7 @@
 
   - name: tower url
     debug:
-      msg: "You should be able to access Tower at https://{{ hostvars[groups['tower'][0]]['ip_address'] }}"
+      msg: "If you're default browser didn't open to the Tower login automatically, you can navigate to https://{{ hostvars[groups['tower'][0]]['ip_address'] }}"
 
   run_once: true
   tags: install_tower
