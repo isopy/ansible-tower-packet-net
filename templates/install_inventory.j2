@@ -1,21 +1,21 @@
 [tower]
 {% for host in groups['tower'] %}
-{{ host }}  ansible_host={{ hostvars[host]['ip_address']}}
+{{ hostvars[host]['ip_address']}}
 {% endfor %}
 
 [instance_group_dev]
 {% for host in groups['instance_group_dev'] %}
-{{ host }}  ansible_host={{ hostvars[host]['ip_address']}}
+{{ hostvars[host]['ip_address']}}
 {% endfor %}
 
 [instance_group_prod]
 {% for host in groups['instance_group_prod'] %}
-{{ host }}  ansible_host={{ hostvars[host]['ip_address']}}
+{{ hostvars[host]['ip_address']}}
 {% endfor %}
 
 [isolated_group_uk]
 {% for host in groups['isolated_group_uk'] %}
-{{ host }}  ansible_host={{ hostvars[host]['ip_address']}}
+{{ hostvars[host]['ip_address']}}
 {% endfor %}
 
 [isolated_group_uk:vars]
@@ -23,7 +23,7 @@ controller=tower
 
 [database]
 {% for host in groups['database'] %}
-{{ host }}  ansible_host={{ hostvars[host]['ip_address']}}
+{{ hostvars[host]['ip_address']}}
 {% endfor %}
 
 [all:vars]
