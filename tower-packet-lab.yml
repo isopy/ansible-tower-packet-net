@@ -1,14 +1,3 @@
-- hosts: localhost
-  remote_user: root
-  gather_facts: false
-  become: false
-
-  tasks:
-    - name: include the common role
-      include_role:
-        name: common
-      delegate_to: localhost
-
 - hosts: all
   remote_user: root
   gather_facts: false
