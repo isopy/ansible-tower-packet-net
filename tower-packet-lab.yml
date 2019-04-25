@@ -9,6 +9,11 @@
      facility: 'ewr1'
 
   tasks:
+    - name: include the common role
+      include_role:
+        name: common
+      delegate_to: localhost
+
     - name: include the packet-provision role
       include_role:
         name: packet-provision
