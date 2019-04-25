@@ -3,7 +3,10 @@
   gather_facts: false
   become: false
   vars:
-     instance_state: present
+     instance_state: 'present'
+     tower_version: '3.4.3-1'
+     plan: 't1.small.x86'
+     facility: 'ewr1'
 
   tasks:
     - name: include the packet-provision role
